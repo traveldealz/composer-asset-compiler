@@ -207,6 +207,8 @@ final class Plugin implements
      */
     private function convertErrorsToExceptions(): void
     {
+        $deprecated = E_DEPRECATED | E_USER_DEPRECATED | E_NOTICE | E_USER_NOTICE | E_STRICT;
+
         set_error_handler(
             static function (int $severity, string $msg, string $file = '', int $line = 0): void {
                 if ($file && $line) {
@@ -215,7 +217,7 @@ final class Plugin implements
 
                 throw new \Exception($msg, $severity);
             },
-            E_ALL
+            E_ALL & ~$deprecated
         );
     }
 
